@@ -1,11 +1,437 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import '../styles/global.css'
 ---
+<!DOCTYPE html>
+<html lang="sk" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANKL cap | Angel Investor & Private Equity</title>
+    
+     
+    <!-- Alpine.js (Core + Intersect Plugin для анимаций при скролле) -->
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
 
-<Layout>
-	<Welcome />
-</Layout>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #050505;
+            color: #E5E7EB;
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* ASTRO BACKGROUND STARS */
+        .stars-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
+            overflow: hidden;
+        }
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.5;
+            animation: twinkle 5s infinite;
+        }
+        @keyframes twinkle {
+            0% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.5); }
+            100% { opacity: 0.3; transform: scale(1); }
+        }
+
+        /* Silver Gradient Text */
+        .text-silver-gradient {
+            background: linear-gradient(to right, #9CA3AF, #F3F4F6, #9CA3AF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200% auto;
+            animation: shine 5s linear infinite;
+        }
+        @keyframes shine {
+            to { background-position: 200% center; }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #000;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4B5563;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #9CA3AF;
+        }
+        
+        [x-cloak] { display: none !important; }
+
+        .bg-dark-bg {
+            background-color: #050505;
+        }
+
+        @keyframes pulseSlow {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.05); }
+        }
+
+        .animate-pulse-slow {
+            animation: pulseSlow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- BACKGROUND STARS GENERATOR -->
+    <div class="stars-bg" x-data x-init="
+         for(let i=0; i<100; i++){
+            let s = document.createElement('div');
+            s.className = 'star';
+            s.style.left = Math.random() * 100 + '%';
+            s.style.top = Math.random() * 100 + '%';
+            s.style.animationDelay = Math.random() * 5 + 's';
+            $el.appendChild(s);
+         }
+    "></div>
+
+    <!-- SMART NAVBAR -->
+    <nav x-data="{ 
+            visible: true, 
+            lastScroll: 0, 
+            mobileMenu: false,
+            init() {
+                window.addEventListener('scroll', () => {
+                    let st = window.pageYOffset;
+                    if (st <= 0) { this.visible = true; }
+                    else { this.visible = st < this.lastScroll; }
+                    this.lastScroll = st;
+                });
+            }
+        }"
+        :class="visible ? 'translate-y-0' : '-translate-y-full'"
+        class="fixed top-0 w-full z-50 transition-transform duration-300 bg-black/80 backdrop-blur-md border-b border-white/10">
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo -->
+                <div class="flex-shrink-0">
+                    <a href="#" class="text-2xl font-bold text-white tracking-widest border border-white/20 px-3 py-1 uppercase">
+                        ANKL<span class="text-gray-400">cap</span>
+                    </a>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="#about" class="hover:text-white text-gray-400 transition-colors px-3 py-2 text-sm font-medium">Vývoj</a>
+                        <a href="#firmy" class="hover:text-white text-gray-400 transition-colors px-3 py-2 text-sm font-medium">Firmy</a>
+                        <a href="#projekty" class="hover:text-white text-gray-400 transition-colors px-3 py-2 text-sm font-medium">Projekty</a>
+                        <a href="#bio" class="hover:text-white text-gray-400 transition-colors px-3 py-2 text-sm font-medium">Bio</a>
+                        <a href="#kontakt" class="px-4 py-2 border border-gray-400 text-gray-300 hover:bg-gray-100 hover:text-black transition duration-300 text-sm font-medium">Kontakt</a>
+                    </div>
+                </div>
+
+                <!-- Mobile burger -->
+                <div class="-mr-2 flex md:hidden">
+                    <button @click="mobileMenu = !mobileMenu" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white focus:outline-none">
+                        <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                            <path :class="{'hidden': mobileMenu, 'inline-flex': !mobileMenu }" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                            <path :class="{'hidden': !mobileMenu, 'inline-flex': mobileMenu }" x-cloak stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div x-show="mobileMenu" x-collapse class="md:hidden bg-black border-t border-gray-800">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 text-center">
+                <a @click="mobileMenu = false" href="#about" class="text-gray-300 hover:text-white block px-3 py-2 text-base font-medium">Vývoj</a>
+                <a @click="mobileMenu = false" href="#firmy" class="text-gray-300 hover:text-white block px-3 py-2 text-base font-medium">Firmy</a>
+                <a @click="mobileMenu = false" href="#projekty" class="text-gray-300 hover:text-white block px-3 py-2 text-base font-medium">Projekty</a>
+                <a @click="mobileMenu = false" href="#bio" class="text-gray-300 hover:text-white block px-3 py-2 text-base font-medium">Bio</a>
+                <a @click="mobileMenu = false" href="#kontakt" class="text-gray-300 hover:text-white block px-3 py-2 text-base font-medium">Kontakt</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="relative h-screen flex flex-col items-center justify-center text-center px-4 overflow-hidden">
+        <!-- Glow effect behind text -->
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-slate-700 rounded-full mix-blend-screen filter blur-[100px] opacity-20 animate-pulse-slow"></div>
+
+        <div class="relative z-10" x-data="{ show: false }" x-init="setTimeout(() => show = true, 500)">
+            <h1 class="text-6xl md:text-8xl font-black tracking-tighter mb-4 opacity-0 transition-opacity duration-1000"
+                :class="show ? 'opacity-100' : 'opacity-0'">
+                <span class="animate-pulse text-silver-gradient">ANKL cap</span>
+            </h1>
+            <div class="h-px w-24 bg-gradient-to-r from-transparent via-gray-400 to-transparent mx-auto mb-6"></div>
+            <p class="text-xl md:text-2xl text-gray-400 font-light tracking-widest uppercase opacity-0 transform translate-y-4 transition-all duration-1000 delay-500"
+               :class="show ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'">
+                Angel Investor. <span class="text-white font-semibold">Private Equity.</span>
+            </p>
+        </div>
+
+        <!-- Scroll Down Indicator -->
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce text-gray-500">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7-7-7"></path></svg>
+        </div>
+    </section>
+
+    <!-- TIMELINE SECTION -->
+    <section id="about" class="py-24 relative">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-16 text-silver-gradient">Ako sme sa vyvíjali</h2>
+            
+            <div class="relative border-l border-gray-800 ml-4 md:ml-0 md:pl-0 space-y-12">
+                <!-- Timeline Data -->
+                <!-- Item 1 -->
+                <div x-data="{ shown: false }" x-intersect.threshold.0.5="shown = true" 
+                     class="relative pl-8 md:pl-0 md:grid md:grid-cols-2 md:gap-12 transition-all duration-700 transform"
+                     :class="shown ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'">
+                    <!-- Dot -->
+                    <div class="absolute left-[-5px] top-1 md:left-1/2 md:-ml-[5px] w-3 h-3 bg-gray-400 rounded-full shadow-[0_0_10px_rgba(255,255,255,0.5)]"></div>
+                    <!-- Year -->
+                    <div class="md:text-right md:pr-4">
+                        <span class="text-2xl font-bold text-white block">2012</span>
+                    </div>
+                    <!-- Content -->
+                    <div class="text-gray-400">
+                        <p>Začiatok cesty (доаыв).</p>
+                    </div>
+                </div>
+
+                <!-- Item 2 -->
+                <div x-data="{ shown: false }" x-intersect.threshold.0.5="shown = true" 
+                     class="relative pl-8 md:pl-0 md:grid md:grid-cols-2 md:gap-12 transition-all duration-700 delay-100 transform"
+                     :class="shown ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'">
+                    <div class="absolute left-[-5px] top-1 md:left-1/2 md:-ml-[5px] w-3 h-3 bg-gray-400 rounded-full"></div>
+                    <div class="md:text-right md:pr-4">
+                        <span class="text-2xl font-bold text-white block">2013</span>
+                    </div>
+                    <div class="text-gray-400">
+                        <p>Rozvoj aktivít (авава).</p>
+                    </div>
+                </div>
+
+                <!-- Item 3 -->
+                <div x-data="{ shown: false }" x-intersect.threshold.0.5="shown = true" 
+                     class="relative pl-8 md:pl-0 md:grid md:grid-cols-2 md:gap-12 transition-all duration-700 delay-200 transform"
+                     :class="shown ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'">
+                    <div class="absolute left-[-5px] top-1 md:left-1/2 md:-ml-[5px] w-3 h-3 bg-white rounded-full shadow-[0_0_15px_white]"></div>
+                    <div class="md:text-right md:pr-4">
+                        <span class="text-2xl font-bold text-white block">2014</span>
+                    </div>
+                    <div class="text-gray-300">
+                        <p>Začíname s retailovou tlačou a meníme výklady po celom Slovensku.</p>
+                    </div>
+                </div>
+
+                <!-- Item 4 -->
+                <div x-data="{ shown: false }" x-intersect.threshold.0.5="shown = true" 
+                     class="relative pl-8 md:pl-0 md:grid md:grid-cols-2 md:gap-12 transition-all duration-700 delay-300 transform"
+                     :class="shown ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'">
+                    <div class="absolute left-[-5px] top-1 md:left-1/2 md:-ml-[5px] w-3 h-3 bg-gray-400 rounded-full"></div>
+                    <div class="md:text-right md:pr-4">
+                        <span class="text-2xl font-bold text-white block">2018</span>
+                    </div>
+                    <div class="text-gray-400">
+                        <p>Budujeme vlastné marketingové štúdio a rozširujeme služby o digitálny marketing.</p>
+                    </div>
+                </div>
+
+                <!-- Item 5 -->
+                <div x-data="{ shown: false }" x-intersect.threshold.0.5="shown = true" 
+                     class="relative pl-8 md:pl-0 md:grid md:grid-cols-2 md:gap-12 transition-all duration-700 delay-400 transform"
+                     :class="shown ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'">
+                    <div class="absolute left-[-5px] top-1 md:left-1/2 md:-ml-[5px] w-3 h-3 bg-gray-400 rounded-full"></div>
+                    <div class="md:text-right md:pr-4">
+                        <span class="text-2xl font-bold text-white block">2022</span>
+                    </div>
+                    <div class="text-gray-400">
+                        <p>Spúšťame projekty pre zahraničných klientov a otvárame prvé partnerstvá v EÚ.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FIRMY (Interactive Carousel) -->
+    <section id="firmy" class="py-24 bg-dark-bg border-t border-gray-900 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4" x-data="{ 
+            active: 1, 
+            companies: [
+                { id: 0, name: 'Shark', desc: 'Retail, Experiments & Innovation', color: 'bg-white', text: 'text-black', details: 'Shark realizuje rôzne projekty a zastrešuje viaceré značky v rámci skupiny ANKL Cap.' },
+                { id: 1, name: 'KPK Reklama', desc: 'Full-service advertising', color: 'bg-[#e8dcc6]', text: 'text-[#3e2b1d]', details: 'Komplexné reklamné služby od tlače po digitál.' },
+                { id: 2, name: 'Razdva', desc: 'Solutions & Development', color: 'bg-white', text: 'text-black', details: 'Softvérové riešenia a vývoj na mieru.' }
+            ]
+        }">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 text-white">Firmy v skupine</h2>
+            
+            <!-- Mobile View: Snap Scroll -->
+            <div class="md:hidden flex space-x-4 overflow-x-auto snap-x snap-mandatory pb-8 px-4">
+                <template x-for="company in companies" :key="company.id">
+                    <div class="snap-center shrink-0 w-[85vw] h-80 rounded-2xl p-8 flex flex-col justify-center shadow-2xl relative"
+                         :class="company.color">
+                        <div class="h-16 w-1 bg-black absolute left-8 top-1/2 transform -translate-y-1/2"></div>
+                        <h3 class="text-3xl font-bold ml-6" :class="company.text" x-text="company.name"></h3>
+                        <p class="mt-4 ml-6 opacity-80" :class="company.text" x-text="company.desc"></p>
+                    </div>
+                </template>
+            </div>
+
+            <!-- Desktop View: Interactive Expansion -->
+            <div class="hidden md:flex justify-center items-center h-[500px] relative perspective-1000">
+                <template x-for="(company, index) in companies" :key="company.id">
+                    <div 
+                        @click="active = index"
+                        class="transition-all duration-700 ease-out absolute cursor-pointer rounded-2xl shadow-2xl flex flex-col justify-center p-10 border border-gray-800"
+                        :class="[
+                            company.color,
+                            active === index ? 'w-[600px] h-[400px] z-20 translate-x-0 opacity-100 blur-0 scale-100' : 
+                            (index < active ? '-translate-x-[350px] w-[300px] h-[300px] z-10 opacity-40 blur-[2px] scale-90' : 
+                            'translate-x-[350px] w-[300px] h-[300px] z-10 opacity-40 blur-[2px] scale-90')
+                        ]"
+                    >
+                        <div x-show="active === index" x-transition.opacity.duration.500 class="absolute top-4 right-4 text-gray-400">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
+                        
+                        <div class="flex items-center h-full">
+                            <div class="h-16 w-1 bg-black mr-6 shrink-0 transition-all duration-500" :class="active === index ? 'h-32' : 'h-12'"></div>
+                            <div>
+                                <h3 class="font-bold transition-all duration-500" 
+                                    :class="[company.text, active === index ? 'text-4xl mb-4' : 'text-2xl']" 
+                                    x-text="company.name"></h3>
+                                
+                                <div x-show="active === index" x-collapse>
+                                    <p class="text-lg font-medium opacity-70 mb-4" :class="company.text" x-text="company.desc"></p>
+                                    <p class="text-sm opacity-90 leading-relaxed max-w-md" :class="company.text" x-text="company.details"></p>
+                                    <button class="mt-6 px-6 py-2 border border-black/30 rounded-full text-sm hover:bg-black hover:text-white transition" :class="company.text">Viac info</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </section>
+
+    <div x-data="{ 
+        links: [
+            'www.printexpert.sk', 'www.inzero.sk', 'www.shark.sk',
+            'www.moodbooster.sk', 'www.j4ff.sk', 'www.ticketke.sk',
+            'www.pkosice.sk', 'www.hypotekarnyexpert.sk', 'www.akobytmiloinar.sk',
+            'www.obmi.cz', 'www.obmi.institute', 'www.kpkprint.sk',
+            'www.kpkprint.hu', 'www.kpkprint.de', 'www.ledbox.sk',
+            'www.safetyfloor.sk', 'www.kreativnetapety.sk', 'www.razdva.solutions'
+        ] 
+    }">
+    <!-- PROJEKTY (List View) -->
+    <section id="projekty" class="py-20 relative bg-gradient-to-b from-black to-[#0a0a0a]">
+        <div class="max-w-6xl mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12 text-gray-200">Naše Projekty</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- Alpine Loop for Links -->
+                <template x-for="link in links" :key="link">
+                    <a :href="'https://' + link" target="_blank" 
+                       class="group flex items-center justify-between p-4 bg-[#111] border border-gray-800 rounded-lg hover:border-gray-500 hover:bg-[#1a1a1a] transition-all duration-300">
+                        <span class="text-gray-400 group-hover:text-white font-mono text-sm" x-text="link"></span>
+                        <svg class="w-4 h-4 text-gray-600 group-hover:text-white transform group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                    </a>
+                </template>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROJEKTY ALT (Icons / Grid View) -->
+    <section class="py-20 bg-[#0a0a0a]">
+        <div class="max-w-6xl mx-auto px-4">
+            <h3 class="text-xl font-semibold text-center mb-10 text-gray-500 uppercase tracking-widest">Rýchly prístup</h3>
+            
+            <div class="flex flex-wrap justify-center gap-3">
+                <template x-for="link in links" :key="link + '-grid'">
+                    <a :href="'https://' + link" target="_blank" 
+                       class="w-12 h-12 md:w-16 md:h-16 bg-gray-800 hover:bg-white hover:shadow-[0_0_15px_rgba(255,255,255,0.8)] rounded-md flex items-center justify-center transition-all duration-300 transform hover:-translate-y-1 group"
+                       :title="link">
+                        <!-- Placeholder Icon (Rectangle) -->
+                        <div class="w-6 h-4 md:w-8 md:h-5 border-2 border-gray-500 group-hover:border-black rounded-sm"></div>
+                    </a>
+                </template>
+            </div>
+        </div>
+    </section>
+    </div>
+
+    <!-- BIO SECTION -->
+    <section id="bio" class="py-24 relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-gray-900 to-black opacity-50"></div>
+        <div class="max-w-5xl mx-auto px-4 relative z-10">
+            <div class="flex flex-col md:flex-row items-center gap-12">
+                <!-- Photo Placeholder -->
+                <div class="w-64 h-64 md:w-80 md:h-80 shrink-0 relative">
+                    <div class="absolute inset-0 border-2 border-gray-700 transform rotate-6"></div>
+                    <div class="absolute inset-0 bg-gray-800 grayscale hover:grayscale-0 transition duration-700 overflow-hidden shadow-2xl">
+                        <!-- Replace src with real photo -->
+                        <img src="https://ui-avatars.com/api/?name=Andrej+Klima&background=1F2937&color=fff&size=400" alt="Andrej Klíma" class="w-full h-full object-cover">
+                    </div>
+                </div>
+                
+                <!-- Bio Text -->
+                <div class="text-center md:text-left">
+                    <h2 class="text-4xl font-bold text-white mb-2">Andrej KLÍMA</h2>
+                    <p class="text-xl text-gray-400 mb-6 font-light">CEO & Founder</p>
+                    <div class="h-px w-20 bg-gray-600 mb-6 mx-auto md:mx-0"></div>
+                    <p class="text-gray-300 leading-relaxed mb-4">
+                        Zakladateľ skupiny ANKL Cap s viac ako 10-ročnými skúsenosťami v oblasti investícií a riadenia podnikov. 
+                        Vášnivo buduje mosty medzi tradičným biznisom a modernými technológiami.
+                    </p>
+                    <p class="text-gray-300 leading-relaxed">
+                        Špecializuje sa na Private Equity a pomoc startupom v ranných fázach (Angel Investor).
+                        Víziou je vytvárať udržateľné hodnoty a silné partnerstvá v celej Európe.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- KONTAKTY -->
+    <section id="kontakt" class="py-20 bg-black border-t border-gray-900">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold mb-12 text-white">Kontaktujte nás</h2>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="p-8 border border-gray-800 hover:border-gray-600 transition duration-500 bg-[#080808]">
+                    <svg class="w-8 h-8 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                    <a href="mailto:ak@anklcap.sk" class="text-xl text-white hover:text-gray-300 transition">ak@anklcap.sk</a>
+                </div>
+                
+                <div class="p-8 border border-gray-800 hover:border-gray-600 transition duration-500 bg-[#080808]">
+                    <svg class="w-8 h-8 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                    <a href="tel:+421905587938" class="text-xl text-white hover:text-gray-300 transition">+421 905 587 938</a>
+                </div>
+            </div>
+            
+            <div class="mt-12 text-gray-500 text-sm">
+                <p>ANKL Cap &copy; 2025. All rights reserved.</p>
+                <p class="mt-2 text-xs opacity-50">Designed with passion.</p>
+            </div>
+        </div>
+    </section>
+
+</body>
+</html>
