@@ -1,0 +1,353 @@
+---
+// @ts-nocheck
+import CardCover from "@/components/knowledge-card/CardCover.astro";
+import ShareButtons from "@/components/ShareButtons.astro";
+import { createCardStyles } from "@/lib/utils";
+import {
+  DEFAULT_KNOWLEDGE_CARD_THEME,
+  KNOWLEDGE_CARD_THEME,
+} from "@/themes/knowledge-card-themes";
+import "@/styles/card.css";
+
+interface CompanyCard {
+  id: string;
+  title: string;
+  subtitle?: string;
+  description: string;
+  url?: string;
+  logo?: string;
+  tags?: string[];
+  // можно будет переопределять шаблон (vintage, glassmorphism и т.д.)
+  template?: string;
+}
+
+const cards = (Astro.props as { cards: CompanyCard[] }).cards ?? [];
+---
+
+<section class="bg-slate-900/30 py-24">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="mb-16 flex items-center justify-between">
+      <div>
+        <h2 class="mb-4 text-3xl font-bold text-white">
+          Spoločnosti <span class="text-nebula">v skupine</span>
+        </h2>
+        <p class="text-slate-400 max-w-2xl">
+          Kliknite na kartu spoločnosti a zobrazí sa detail s podobnou kartou.
+        </p>
+      </div>
+    </div>
+
+    <!-- ????? ??????? ???????? -->
+    <div class="grid gap-10 md:grid-cols-2 lg:grid-cols-3">
+      {cards.map((card, index) => (
+        <button
+          type="button"
+          class="group relative block w-full transition focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
+          data-cover-index={index}
+          aria-label={`Otvoriť detail spoločnosti ${card.title}`}
+        >
+          <CardCover
+            title={card.title}
+            template={card.template || "vintage"}
+          />
+        </button>
+      ))}
+    </div>
+  </div>
+
+  <!-- Оверлей с большой карточкой + соседями -->
+  <div
+    class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 px-4 py-8 backdrop-blur"
+    data-featured-overlay
+  >
+    <div class="relative w-full max-w-3xl">
+      {cards.map((card, index) => {
+        const prevIndex = (index - 1 + cards.length) % cards.length;
+        const nextIndex = (index + 1) % cards.length;
+        const prevCard = cards[prevIndex];
+        const nextCard = cards[nextIndex];
+        const templateName = card.template || DEFAULT_KNOWLEDGE_CARD_THEME;
+        const cardTheme =
+          KNOWLEDGE_CARD_THEME[templateName] ||
+          KNOWLEDGE_CARD_THEME[DEFAULT_KNOWLEDGE_CARD_THEME];
+        const cardStyles = createCardStyles(templateName);
+        const actionButtonBackground =
+          "w-12 h-12 bg-white rounded-xl shadow-lg border border-gray-200 hover:shadow-xl hover:bg-gray-50 transition-all duration-200 flex items-center justify-center";
+        const copyPayload = {
+          title: card.title,
+          subtitle: card.subtitle,
+          description: card.description,
+          url: card.url,
+          bullets: card.bullets,
+          links: card.links,
+          tags: card.tags,
+        };
+        const copyContent = `\`\`\`json\n${JSON.stringify(copyPayload, null, 2)}\n\`\`\``;
+        const shareIdPrefix = `company-share-${card.id ?? index}`;
+
+        return (
+          <div
+            class:list={[
+                    // базовые классы для анимации
+                    "absolute inset-0 flex items-center justify-center opacity-0 pointer-events-none transform translate-x-0 scale-95 transition-all duration-300 ease-out",
+                    // стартовое активное состояние (первый слайд)
+                    index === 0 && "opacity-100 pointer-events-auto scale-100",
+            ]}
+            data-card-index={index}
+          >
+
+            {/* Левая маленькая карточка */}
+
+            {prevCard && (
+              <button
+                type="button"
+                class="hidden md:block absolute left-[-300px] top-1/2 -translate-y-1/2 mt-24 min-w-80 rotate-[-8deg] opacity-70 hover:opacity-100 transition"
+                data-jump={prevIndex}
+                aria-label={`Zobraziť spoločnosť ${prevCard.title}`}
+              >
+                <CardCover
+                  title={prevCard.title}
+                  template={prevCard.template || "vintage"}
+                  size="small"
+                />
+              </button>
+            )}
+
+            {/* Центральная большая карточка в стиле knowledge-card */}
+            <div class="relative mx-auto w-full max-w-4xl z-50">
+              <div
+                class={`relative rounded-4xl overflow-hidden shadow-2xl knowledge-card-modal ${cardTheme.backgroundClass || ""}`}
+                style={cardStyles}
+              >
+                <button
+                  type="button"
+                  class="absolute right-6 top-6 inline-flex h-8 w-8 items-center justify-center rounded-full bg-slate-900/5 text-slate-500 hover:bg-slate-900/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 z-10"
+                  aria-label="Zavrieť detail"
+                  data-close
+                >
+                  ✕
+                </button>
+
+                <div class="p-8 md:p-10 space-y-6">
+                  <div class="flex items-start gap-4">
+                    <div class="card-decorative-line" />
+                    <div class="flex-1 min-w-0">
+                      <h2 class="card-title text-left">
+                        {card.title}
+                      </h2>
+                      {card.tags && card.tags.length > 0 ? (
+                        <div class="mt-3 flex flex-wrap gap-2">
+                          {card.tags.map((tag) => (
+                            <span
+                              class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium border border-slate-400 text-slate-200 px-3 py-1 uppercase tracking-wide bg-black/40"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      ) : (
+                        card.subtitle && (
+                          <p class="mt-3 card-key-point text-left">
+                            {card.subtitle}
+                          </p>
+                        )
+                      )}
+                    </div>
+                  </div>
+
+<p class="card-description text-left">
+  {card.description}
+</p>
+
+{card.bullets && card.bullets.length > 0 && (
+  <div class="mt-4 space-y-2 text-left">
+    <p class="card-section-title text-left text-base">Zameranie / služby:</p>
+    <ul class="list-disc pl-5 space-y-1">
+      {card.bullets.map((item) => (
+        <li class="card-description">{item}</li>
+      ))}
+    </ul>
+  </div>
+)}
+
+{card.links && card.links.length > 0 && (
+  <div class="mt-6 space-y-2 text-left">
+    <p class="card-section-title text-left text-base">Projekty / weby:</p>
+    <ul class="space-y-1">
+      {card.links.map((link) => (
+        <li class="card-description">
+          <a
+            href={link}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="card-a-link inline-flex items-center gap-1"
+          >
+            {link.replace("https://", "")}
+            <span aria-hidden="true">↗</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+)}
+
+                </div>
+              </div>
+
+
+            </div>
+
+            {/* Правая маленькая карточка */}
+
+            {nextCard && (
+              <button
+                type="button"
+                class="hidden md:block absolute right-[-300px] top-1/2 -translate-y-1/2 mt-24 min-w-80 rotate-[8deg] opacity-70 hover:opacity-100 transition"
+                data-jump={nextIndex}
+                aria-label={`Zobraziť spoločnosť ${nextCard.title}`}
+              >
+                <CardCover
+                  title={nextCard.title}
+                  template={nextCard.template || "vintage"}
+                  size="small"
+                />
+              </button>
+            )}
+
+          </div>
+        );
+      })}
+    </div>
+  </div>
+</section>
+
+<script is:inline>
+  (() => {
+    const overlay = document.querySelector("[data-featured-overlay]");
+    if (!overlay) return;
+
+    const covers = Array.from(
+      document.querySelectorAll("[data-cover-index]")
+    );
+    const slides = Array.from(
+      overlay.querySelectorAll("[data-card-index]")
+    );
+    const jumpButtons = Array.from(
+      overlay.querySelectorAll("[data-jump]")
+    );
+    const closeButtons = Array.from(
+      overlay.querySelectorAll("[data-close]")
+    );
+    const linkButtons = Array.from(
+      overlay.querySelectorAll("[data-open-link]")
+    );
+
+    let activeIndex = 0;
+    let touchStartX = 0;
+    let touchEndX = 0;
+    const SWIPE_THRESHOLD = 50;
+
+const setActive = (index) => {
+  if (!slides.length) return;
+  activeIndex = (index + slides.length) % slides.length;
+
+  slides.forEach((slide, i) => {
+    const isActive = i === activeIndex;
+
+    // видимость
+    slide.classList.toggle("opacity-100", isActive);
+    slide.classList.toggle("pointer-events-auto", isActive);
+    slide.classList.toggle("opacity-0", !isActive);
+    slide.classList.toggle("pointer-events-none", !isActive);
+
+    // масштаб для плавного зума
+    slide.classList.toggle("scale-100", isActive);
+    slide.classList.toggle("scale-95", !isActive);
+  });
+};
+
+
+    const openOverlay = (index) => {
+      setActive(index);
+      overlay.classList.remove("hidden");
+      document.body.style.overflow = "hidden";
+      overlay.scrollTo({ top: 0 });
+    };
+
+    const closeOverlay = () => {
+      overlay.classList.add("hidden");
+      document.body.style.overflow = "";
+    };
+
+    const handleTouchStart = (event) => {
+      if (!event.touches || event.touches.length === 0) return;
+      touchStartX = event.touches[0].clientX;
+      touchEndX = touchStartX;
+    };
+
+    const handleTouchMove = (event) => {
+      if (!event.touches || event.touches.length === 0) return;
+      touchEndX = event.touches[0].clientX;
+    };
+
+    const handleTouchEnd = () => {
+      const deltaX = touchEndX - touchStartX;
+      if (Math.abs(deltaX) < SWIPE_THRESHOLD) {
+        return;
+      }
+
+      if (deltaX > 0) {
+        setActive(activeIndex - 1);
+      } else {
+        setActive(activeIndex + 1);
+      }
+    };
+
+    covers.forEach((cover) => {
+      const idx = Number(cover.dataset.coverIndex || 0);
+      cover.addEventListener("click", (e) => {
+        e.preventDefault();
+        openOverlay(idx);
+      });
+    });
+
+    jumpButtons.forEach((btn) => {
+      const target = Number(btn.dataset.jump || 0);
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        setActive(target);
+      });
+    });
+
+    closeButtons.forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        closeOverlay();
+      });
+    });
+
+    overlay.addEventListener("click", (e) => {
+      if (e.target === overlay) {
+        closeOverlay();
+      }
+    });
+
+    window.addEventListener("card-close", closeOverlay);
+
+    linkButtons.forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        const url = btn.dataset.openLink;
+        if (url) window.open(url, "_blank");
+      });
+    });
+
+    overlay.addEventListener("touchstart", handleTouchStart, {
+      passive: true,
+    });
+    overlay.addEventListener("touchmove", handleTouchMove, {
+      passive: true,
+    });
+    overlay.addEventListener("touchend", handleTouchEnd);
+  })();
+</script>

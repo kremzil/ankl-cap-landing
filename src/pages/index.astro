@@ -1,5 +1,62 @@
 ﻿---
 import Layout from '../layouts/Layout.astro';
+
+const companyCards = [
+	{
+		id: 'shark',
+		title: 'Shark',
+		subtitle: 'Retail & Innovation',
+		description: 'Retailová jednotka skupiny – pilotné projekty, experimenty a pop-up riešenia.',
+		details:
+			'Shark realizuje rôzne projekty a zastrešuje viaceré značky v rámci skupiny ANKL Cap, vrátane retailových rolloutov po celom Slovensku.',
+		tags: ['Retail', 'Experimenty', 'Pop-up'],
+		services: ['Retail rollouts a výklady', 'Eventové a promo inštalácie', 'Pilotné projekty pre nové značky'],
+		links: [
+			{ label: 'www.shark.sk', href: 'https://www.shark.sk' },
+			{ label: 'www.moodbooster.sk', href: 'https://www.moodbooster.sk' }
+		],
+		colors: {
+			card: 'bg-white text-gray-900',
+			accent: 'bg-gray-900 text-white',
+			chip: 'text-gray-600'
+		}
+	},
+	{
+		id: 'kpk',
+		title: 'KPK Reklama',
+		subtitle: 'Full-service advertising',
+		description: 'Komplexná produkcia od veľkoformátovej tlače po digitál, aktívna v celej strednej Európe.',
+		details:
+			'KPK zabezpečuje tlač, polepy, LED riešenia aj digitálne kampane pre retail a firemných klientov na Slovensku a v zahraničí.',
+		tags: ['Tlač', 'LED', 'Digitál'],
+		services: ['Tlač a produkcia POSM', 'LED boxy a svetelné inštalácie', 'Digitálne kampane'],
+		links: [
+			{ label: 'www.kpkprint.sk', href: 'https://www.kpkprint.sk' },
+			{ label: 'www.kpkprint.de', href: 'https://www.kpkprint.de' }
+		],
+		colors: {
+			card: 'bg-[#f1e9db] text-[#3e2b1d]',
+			accent: 'bg-[#3e2b1d] text-white',
+			chip: 'text-[#6d5740]'
+		}
+	},
+	{
+		id: 'razdva',
+		title: 'Razdva',
+		subtitle: 'Solutions & Development',
+		description: 'Technologické štúdio, ktoré dodáva softvér a podporu pre projekty skupiny aj externých partnerov.',
+		details:
+			'Razdva sa sústreďuje na webové aplikácie, interné nástroje, automatyzáciu workflow a dlhodobú podporu klientov.',
+		tags: ['Software', 'Support', 'Automation'],
+		services: ['Vývoj webových aplikácií', 'Automatizácia procesov', 'Prevádzka a podpora'],
+		links: [{ label: 'www.razdva.solutions', href: 'https://www.razdva.solutions' }],
+		colors: {
+			card: 'bg-white text-gray-900',
+			accent: 'bg-gray-900 text-white',
+			chip: 'text-gray-600'
+		}
+	}
+];
 ---
 <Layout title="ANKL cap | Angel Investor & Private Equity">
     <!-- BACKGROUND STARS GENERATOR -->
@@ -263,6 +320,153 @@ import Layout from '../layouts/Layout.astro';
         </div>
     </section>
 
+    <!-- FIRMY DETAIL (Overlay Slider) -->
+    <section id="firmy-detail" class="py-24 bg-black border-t border-gray-900">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-14">
+                <p class="uppercase tracking-[0.3em] text-sm text-gray-500">Interaktívny prehľad</p>
+                <h2 class="text-3xl md:text-4xl font-bold text-white mt-4">Firmy v skupine — detail</h2>
+                <p class="text-gray-400 mt-4 max-w-3xl mx-auto">
+                    Vyberte si kartu spolo&ccaron;nosti. Po kliknutí sa otvorí detail so zvýraznenou kartou uprostred
+                    a dvomi náhľadmi pre rýchlu navigáciu.
+                </p>
+            </div>
+
+            <div class="grid gap-6 md:grid-cols-3" data-company-grid>
+                {companyCards.map((company, index) => (
+                    <button
+                        type="button"
+                        class={`group relative rounded-3xl border border-white/10 p-6 text-left transition hover:-translate-y-1 hover:border-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40 ${company.colors.card}`}
+                        data-company-trigger={index}
+                    >
+                        <div class="text-xs uppercase tracking-[0.4em] opacity-60 mb-4">{company.subtitle}</div>
+                        <h3 class="text-2xl font-bold mb-4">{company.title}</h3>
+                        <p class="text-sm opacity-80">{company.description}</p>
+                        <div class="mt-6 flex items-center gap-3">
+                            <span class={`inline-flex h-10 w-10 items-center justify-center rounded-full text-xs font-semibold ${company.colors.accent}`}>GO</span>
+                            <span class="text-xs font-semibold tracking-[0.3em] uppercase">Pozrieť detail</span>
+                        </div>
+                    </button>
+                ))}
+            </div>
+        </div>
+
+        <div class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4 py-8 backdrop-blur" data-company-overlay>
+            <div class="relative w-full max-w-4xl">
+                {companyCards.map((company, index) => {
+                    const prevIndex = (index - 1 + companyCards.length) % companyCards.length;
+                    const nextIndex = (index + 1) % companyCards.length;
+                    const prevCard = companyCards[prevIndex];
+                    const nextCard = companyCards[nextIndex];
+
+                    return (
+                        <div
+                            class:list={[
+                                'absolute inset-0 flex items-center justify-center opacity-0 pointer-events-none transform scale-95 transition-all duration-300 ease-out',
+                                index === 0 && 'opacity-100 pointer-events-auto scale-100'
+                            ]}
+                            data-company-slide
+                            data-company-index={index}
+                        >
+                            {prevCard && (
+                                <button
+                                    type="button"
+                                    class="hidden lg:block absolute left-[-220px] top-1/2 -translate-y-1/2 w-48 rotate-[-6deg] opacity-70 transition hover:opacity-100"
+                                    data-company-jump={prevIndex}
+                                >
+                                    <div class={`rounded-2xl border border-white/10 p-4 text-left shadow-lg ${prevCard.colors.card}`}>
+                                        <p class="text-xs uppercase tracking-[0.3em] opacity-60">{prevCard.subtitle}</p>
+                                        <p class="text-lg font-semibold">{prevCard.title}</p>
+                                    </div>
+                                </button>
+                            )}
+
+                            <div class="relative mx-auto w-full max-w-3xl rounded-[30px] border border-white/10 bg-gradient-to-b from-gray-950 to-gray-900 shadow-2xl overflow-hidden">
+                                <button
+                                    type="button"
+                                    class="absolute right-6 top-6 inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/5 text-white hover:bg-white/15 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+                                    data-company-close
+                                    aria-label="Zavrieť detail"
+                                >
+                                    ×
+                                </button>
+
+                                <div class="p-8 md:p-10 space-y-6">
+                                    <div class="flex flex-col gap-4">
+                                        <div class="flex flex-wrap items-center gap-3">
+                                            <span class="inline-flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 text-lg font-bold">{company.title.slice(0, 2)}</span>
+                                            <div>
+                                                <p class="text-sm uppercase tracking-[0.4em] text-gray-400">{company.subtitle}</p>
+                                                <h3 class="text-3xl font-semibold text-white">{company.title}</h3>
+                                            </div>
+                                        </div>
+                                        <p class="text-gray-300 leading-relaxed">{company.details}</p>
+                                        {company.tags?.length ? (
+                                            <div class="flex flex-wrap gap-2">
+                                                {company.tags.map((tag) => (
+                                                    <span class={`rounded-full border border-white/10 px-3 py-1 text-xs font-medium uppercase tracking-[0.2em] ${company.colors.chip}`}>
+                                                        {tag}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        ) : null}
+                                    </div>
+
+                                    <div class="grid gap-6 md:grid-cols-2">
+                                        <div>
+                                            <p class="text-xs uppercase tracking-[0.3em] text-gray-500 mb-3">Služby</p>
+                                            <ul class="space-y-2 text-sm text-gray-300">
+                                                {company.services.map((item) => (
+                                                    <li class="flex items-start gap-2">
+                                                        <span class="mt-1 h-1.5 w-1.5 rounded-full bg-white/70"></span>
+                                                        <span>{item}</span>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                        <div>
+                                            <p class="text-xs uppercase tracking-[0.3em] text-gray-500 mb-3">Linky</p>
+                                            <ul class="space-y-2 text-sm text-gray-300">
+                                                {company.links.map((link) => (
+                                                    <li>
+                                                        <a
+                                                            href={link.href}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            class="inline-flex items-center gap-2 text-sky-300 hover:text-white transition"
+                                                        >
+                                                            {link.label}
+                                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 7l-10 10m0-6v6h6" />
+                                                            </svg>
+                                                        </a>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {nextCard && (
+                                <button
+                                    type="button"
+                                    class="hidden lg:block absolute right-[-220px] top-1/2 -translate-y-1/2 w-48 rotate-[6deg] opacity-70 transition hover:opacity-100"
+                                    data-company-jump={nextIndex}
+                                >
+                                    <div class={`rounded-2xl border border-white/10 p-4 text-left shadow-lg ${nextCard.colors.card}`}>
+                                        <p class="text-xs uppercase tracking-[0.3em] opacity-60">{nextCard.subtitle}</p>
+                                        <p class="text-lg font-semibold">{nextCard.title}</p>
+                                    </div>
+                                </button>
+                            )}
+                        </div>
+                    );
+                })}
+            </div>
+        </div>
+    </section>
+
     <div x-data="{ 
         links: [
             'www.printexpert.sk', 'www.inzero.sk', 'www.shark.sk',
@@ -479,5 +683,84 @@ import Layout from '../layouts/Layout.astro';
                 }
             };
         };
+    </script>
+    <script>
+        (() => {
+            const overlay = document.querySelector('[data-company-overlay]');
+            if (!overlay) return;
+
+            const triggers = Array.from(document.querySelectorAll('[data-company-trigger]'));
+            const slides = Array.from(overlay.querySelectorAll('[data-company-slide]'));
+            const jumpButtons = Array.from(overlay.querySelectorAll('[data-company-jump]'));
+            const closeButtons = Array.from(overlay.querySelectorAll('[data-company-close]'));
+
+            let activeIndex = 0;
+
+            const setActive = (index) => {
+                if (!slides.length) return;
+                activeIndex = (index + slides.length) % slides.length;
+
+                slides.forEach((slide, idx) => {
+                    const isActive = idx === activeIndex;
+                    slide.classList.toggle('opacity-100', isActive);
+                    slide.classList.toggle('pointer-events-auto', isActive);
+                    slide.classList.toggle('scale-100', isActive);
+                    slide.classList.toggle('opacity-0', !isActive);
+                    slide.classList.toggle('pointer-events-none', !isActive);
+                    slide.classList.toggle('scale-95', !isActive);
+                });
+            };
+
+            const openOverlay = (index) => {
+                setActive(index);
+                overlay.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            };
+
+            const closeOverlay = () => {
+                overlay.classList.add('hidden');
+                document.body.style.overflow = '';
+            };
+
+            triggers.forEach((trigger) => {
+                const idx = Number(trigger.dataset.companyTrigger || 0);
+                trigger.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    openOverlay(idx);
+                });
+            });
+
+            jumpButtons.forEach((btn) => {
+                const idx = Number(btn.dataset.companyJump || 0);
+                btn.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    setActive(idx);
+                });
+            });
+
+            closeButtons.forEach((btn) => {
+                btn.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    closeOverlay();
+                });
+            });
+
+            overlay.addEventListener('click', (event) => {
+                if (event.target === overlay) {
+                    closeOverlay();
+                }
+            });
+
+            window.addEventListener('keydown', (event) => {
+                if (overlay.classList.contains('hidden')) return;
+                if (event.key === 'Escape') {
+                    closeOverlay();
+                } else if (event.key === 'ArrowRight') {
+                    setActive(activeIndex + 1);
+                } else if (event.key === 'ArrowLeft') {
+                    setActive(activeIndex - 1);
+                }
+            });
+        })();
     </script>
 </Layout>
