@@ -541,7 +541,6 @@ const companyCards = [
                 touchStartY: null,
                 isAnimating: false,
                 revealAll: false,
-                lockDelay: null,
                 init() {
                     this.entries = Array.from(this.$refs.timelineList?.querySelectorAll('[data-timeline-entry]') ?? []);
                     this.totalEntries = this.entries.length;
@@ -582,21 +581,15 @@ const companyCards = [
                             return;
                         }
                     }
-                    const fullyVisible = rect.top >= 0 && rect.bottom <= window.innerHeight;
-                    const fillsViewport = rect.top <= 0 && rect.bottom >= window.innerHeight;
-                    const shouldLock = fullyVisible || fillsViewport;
+                    const tolerance = 10;
+                    const shouldLock = rect.top <= tolerance && rect.bottom >= tolerance;
                     if (shouldLock && !this.isLocked) {
-                        if (!this.revealAll) {
-                            this.revealAll = true;
-                            if (this.lockDelay) clearTimeout(this.lockDelay);
-                            this.lockDelay = setTimeout(() => {
-                                if (!this.isLocked) {
-                                    this.lock();
-                                }
-                            }, 400);
-                            return;
-                        }
                         this.lock();
+                        if (!this.revealAll) {
+                            requestAnimationFrame(() => {
+                                this.revealAll = true;
+                            });
+                        }
                     } else if (!shouldLock && this.isLocked) {
                         this.releaseLock();
                     }
@@ -606,10 +599,6 @@ const companyCards = [
                     this.activeIndex = 0;
                 },
                 releaseLock(direction = null) {
-                    if (this.lockDelay) {
-                        clearTimeout(this.lockDelay);
-                        this.lockDelay = null;
-                    }
                     this.isLocked = false;
                     this.activeIndex = -1;
                     if (direction) {
