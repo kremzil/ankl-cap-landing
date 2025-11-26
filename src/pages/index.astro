@@ -352,45 +352,27 @@ const companyCards = [
         </div>
 
         <div class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4 py-8 backdrop-blur" data-company-overlay>
-            <div class="relative w-full max-w-4xl">
-                {companyCards.map((company, index) => {
-                    const prevIndex = (index - 1 + companyCards.length) % companyCards.length;
-                    const nextIndex = (index + 1) % companyCards.length;
-                    const prevCard = companyCards[prevIndex];
-                    const nextCard = companyCards[nextIndex];
+            <div class="relative w-full max-w-5xl">
+                <button
+                    type="button"
+                    class="absolute right-4 top-4 inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 z-50"
+                    data-company-close
+                    aria-label="Zavrieť detail"
+                >
+                    ×
+                </button>
 
-                    return (
+                <div class="md:hidden relative min-h-[560px]">
+                    {companyCards.map((company, index) => (
                         <div
                             class:list={[
                                 'absolute inset-0 flex items-center justify-center opacity-0 pointer-events-none transform scale-95 transition-all duration-300 ease-out',
                                 index === 0 && 'opacity-100 pointer-events-auto scale-100'
                             ]}
-                            data-company-slide
+                            data-company-mobile-slide
                             data-company-index={index}
                         >
-                            {prevCard && (
-                                <button
-                                    type="button"
-                                    class="hidden lg:block absolute left-[-220px] top-1/2 -translate-y-1/2 w-48 rotate-[-6deg] opacity-70 transition hover:opacity-100"
-                                    data-company-jump={prevIndex}
-                                >
-                                    <div class={`rounded-2xl border border-white/10 p-4 text-left shadow-lg ${prevCard.colors.card}`}>
-                                        <p class="text-xs uppercase tracking-[0.3em] opacity-60">{prevCard.subtitle}</p>
-                                        <p class="text-lg font-semibold">{prevCard.title}</p>
-                                    </div>
-                                </button>
-                            )}
-
                             <div class="relative mx-auto w-full max-w-3xl rounded-[30px] border border-white/10 bg-gradient-to-b from-gray-950 to-gray-900 shadow-2xl overflow-hidden">
-                                <button
-                                    type="button"
-                                    class="absolute right-6 top-6 inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/5 text-white hover:bg-white/15 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
-                                    data-company-close
-                                    aria-label="Zavrieť detail"
-                                >
-                                    ×
-                                </button>
-
                                 <div class="p-8 md:p-10 space-y-6">
                                     <div class="flex flex-col gap-4">
                                         <div class="flex flex-wrap items-center gap-3">
@@ -447,22 +429,80 @@ const companyCards = [
                                     </div>
                                 </div>
                             </div>
-
-                            {nextCard && (
-                                <button
-                                    type="button"
-                                    class="hidden lg:block absolute right-[-220px] top-1/2 -translate-y-1/2 w-48 rotate-[6deg] opacity-70 transition hover:opacity-100"
-                                    data-company-jump={nextIndex}
-                                >
-                                    <div class={`rounded-2xl border border-white/10 p-4 text-left shadow-lg ${nextCard.colors.card}`}>
-                                        <p class="text-xs uppercase tracking-[0.3em] opacity-60">{nextCard.subtitle}</p>
-                                        <p class="text-lg font-semibold">{nextCard.title}</p>
-                                    </div>
-                                </button>
-                            )}
                         </div>
-                    );
-                })}
+                    ))}
+                </div>
+
+                <div class="hidden md:block">
+                    <div class="relative h-[520px] perspective-1000">
+                        {companyCards.map((company, index) => (
+                            <div
+                                class="company-overlay-slide cursor-pointer"
+                                data-company-desktop-slide
+                                data-company-index={index}
+                            >
+                                <div class="h-full w-full rounded-[32px] border border-white/10 bg-gradient-to-b from-gray-950 to-gray-900 shadow-2xl overflow-hidden flex flex-col">
+                                    <div class="p-10 space-y-6 flex-1 flex flex-col">
+                                        <div class="flex items-start gap-4">
+                                            <div class="h-12 w-12 rounded-2xl border border-white/20 flex items-center justify-center font-semibold text-white text-lg">
+                                                {company.title.slice(0, 2)}
+                                            </div>
+                                            <div>
+                                                <p class="text-xs uppercase tracking-[0.5em] text-gray-500">{company.subtitle}</p>
+                                                <h3 class="text-3xl font-bold text-white">{company.title}</h3>
+                                            </div>
+                                        </div>
+                                        <p class="text-gray-300 text-sm leading-relaxed">
+                                            {company.details}
+                                        </p>
+                                        {company.tags?.length ? (
+                                            <div class="flex flex-wrap gap-2">
+                                                {company.tags.map((tag) => (
+                                                    <span class={`rounded-full border border-white/10 px-3 py-1 text-xs font-medium uppercase tracking-[0.2em] ${company.colors.chip}`}>
+                                                        {tag}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        ) : null}
+                                        <div class="mt-auto grid grid-cols-2 gap-4 text-sm text-gray-200">
+                                            <div>
+                                                <p class="text-[0.6rem] uppercase tracking-[0.5em] text-gray-500 mb-2">Služby</p>
+                                                <ul class="space-y-1">
+                                                    {company.services.map((item) => (
+                                                        <li class="flex items-start gap-1">
+                                                            <span class="mt-1 h-1.5 w-1.5 rounded-full bg-white/70"></span>
+                                                            <span>{item}</span>
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            </div>
+                                            <div>
+                                                <p class="text-[0.6rem] uppercase tracking-[0.5em] text-gray-500 mb-2">Linky</p>
+                                                <ul class="space-y-1">
+                                                    {company.links.map((link) => (
+                                                        <li>
+                                                            <a
+                                                                href={link.href}
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                                class="inline-flex items-center gap-2 text-sky-300 hover:text-white transition"
+                                                            >
+                                                                {link.label}
+                                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 7l-10 10m0-6v6h6" />
+                                                                </svg>
+                                                            </a>
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -706,17 +746,30 @@ const companyCards = [
             if (!overlay) return;
 
             const triggers = Array.from(document.querySelectorAll('[data-company-trigger]'));
-            const slides = Array.from(overlay.querySelectorAll('[data-company-slide]'));
-            const jumpButtons = Array.from(overlay.querySelectorAll('[data-company-jump]'));
+            const desktopSlides = Array.from(overlay.querySelectorAll('[data-company-desktop-slide]'));
+            const mobileSlides = Array.from(overlay.querySelectorAll('[data-company-mobile-slide]'));
             const closeButtons = Array.from(overlay.querySelectorAll('[data-company-close]'));
 
             let activeIndex = 0;
 
             const setActive = (index) => {
-                if (!slides.length) return;
-                activeIndex = (index + slides.length) % slides.length;
+                const total = desktopSlides.length || mobileSlides.length;
+                if (!total) return;
+                activeIndex = (index + total) % total;
 
-                slides.forEach((slide, idx) => {
+                desktopSlides.forEach((slide, idx) => {
+                    slide.classList.remove('center', 'left', 'right');
+                    if (!desktopSlides.length) return;
+                    if (idx === activeIndex) {
+                        slide.classList.add('center');
+                    } else if (idx < activeIndex) {
+                        slide.classList.add('left');
+                    } else {
+                        slide.classList.add('right');
+                    }
+                });
+
+                mobileSlides.forEach((slide, idx) => {
                     const isActive = idx === activeIndex;
                     slide.classList.toggle('opacity-100', isActive);
                     slide.classList.toggle('pointer-events-auto', isActive);
@@ -746,9 +799,9 @@ const companyCards = [
                 });
             });
 
-            jumpButtons.forEach((btn) => {
-                const idx = Number(btn.dataset.companyJump || 0);
-                btn.addEventListener('click', (event) => {
+            desktopSlides.forEach((slide) => {
+                const idx = Number(slide.dataset.companyIndex || 0);
+                slide.addEventListener('click', (event) => {
                     event.preventDefault();
                     setActive(idx);
                 });

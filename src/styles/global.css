@@ -101,3 +101,45 @@ body {
 .animate-pulse-slow {
 	animation: pulseSlow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
+
+.company-overlay-slide {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 320px;
+	height: 360px;
+	transform: translate(-50%, -50%) scale(0.9);
+	opacity: 0;
+	filter: blur(4px);
+	pointer-events: none;
+	transition:
+		transform 0.7s ease,
+		opacity 0.7s ease,
+		filter 0.7s ease;
+}
+
+.company-overlay-slide.center {
+	width: 640px;
+	height: 420px;
+	transform: translate(-50%, -50%) scale(1);
+	opacity: 1;
+	filter: blur(0);
+	pointer-events: auto;
+	z-index: 20;
+}
+
+.company-overlay-slide.left {
+	transform: translate(calc(-50% - 320px), -50%) scale(0.9);
+	opacity: 0.5;
+	filter: blur(2px);
+	pointer-events: auto;
+	z-index: 10;
+}
+
+.company-overlay-slide.right {
+	transform: translate(calc(-50% + 320px), -50%) scale(0.9);
+	opacity: 0.5;
+	filter: blur(2px);
+	pointer-events: auto;
+	z-index: 10;
+}
