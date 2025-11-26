@@ -1,1 +1,103 @@
 @import "tailwindcss";
+
+html {
+	scroll-behavior: smooth;
+}
+
+body {
+	background-color: #050505;
+	color: #e5e7eb;
+	font-family: 'Montserrat', sans-serif;
+	overflow-x: hidden;
+}
+
+.stars-bg {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: -1;
+	background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+	overflow: hidden;
+}
+
+.star {
+	position: absolute;
+	width: 2px;
+	height: 2px;
+	background: #fff;
+	border-radius: 50%;
+	opacity: 0.5;
+	animation: twinkle 5s infinite;
+}
+
+@keyframes twinkle {
+	0% {
+		opacity: 0.3;
+		transform: scale(1);
+	}
+	50% {
+		opacity: 1;
+		transform: scale(1.5);
+	}
+	100% {
+		opacity: 0.3;
+		transform: scale(1);
+	}
+}
+
+.text-silver-gradient {
+	background: linear-gradient(to right, #9ca3af, #f3f4f6, #9ca3af);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-size: 200% auto;
+	animation: shine 5s linear infinite;
+}
+
+@keyframes shine {
+	to {
+		background-position: 200% center;
+	}
+}
+
+::-webkit-scrollbar {
+	width: 8px;
+}
+
+::-webkit-scrollbar-track {
+	background: #000;
+}
+
+::-webkit-scrollbar-thumb {
+	background: #4b5563;
+	border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: #9ca3af;
+}
+
+[x-cloak] {
+	display: none !important;
+}
+
+.bg-dark-bg {
+	background-color: #050505;
+}
+
+@keyframes pulseSlow {
+	0%,
+	100% {
+		opacity: 1;
+		transform: scale(1);
+	}
+	50% {
+		opacity: 0.5;
+		transform: scale(1.05);
+	}
+}
+
+.animate-pulse-slow {
+	animation: pulseSlow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
