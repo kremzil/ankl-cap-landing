@@ -1,5 +1,7 @@
 ---
 import '../styles/global.css';
+import TimelineController from '../components/TimelineController.astro';
+
 
 const { title = 'ANKL cap | Angel Investor & Private Equity' } = Astro.props;
 ---
@@ -14,8 +16,10 @@ const { title = 'ANKL cap | Angel Investor & Private Equity' } = Astro.props;
 		<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&display=swap" rel="stylesheet" />
 	</head>
 	<body class="antialiased">
-		<slot />
 		<script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
 		<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
+		    <TimelineController />
+		<slot />
+
 	</body>
 </html>

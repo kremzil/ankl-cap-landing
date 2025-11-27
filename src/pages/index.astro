@@ -157,107 +157,100 @@ const companyCards = [
     <section
         id="about"
         class="py-24 relative"
-        x-data="timelineScroll()"
+        x-data="timelineController()"
         x-init="init()"
-        x-on:wheel="handleWheel($event)"
-        x-on:touchstart="handleTouchStart($event)"
-        x-on:touchmove="handleTouchMove($event)"
-        x-on:touchend="handleTouchEnd()"
+        x-intersect:enter="onEnterSection()"
+        x-intersect:leave="onLeaveSection()"
     >
         <div class="max-w-4xl mx-auto px-4 sm:px-6">
             <h2 class="text-3xl md:text-4xl font-bold text-center mb-16 text-silver-gradient">Ako sme sa vyvíjali</h2>
             
             <div class="relative border-l border-gray-800 ml-4 md:ml-0 md:pl-0 space-y-12" x-ref="timelineList">
-                <div x-data="{ shown: false }" x-intersect.threshold.0.5="shown = true" x-effect="if (revealAll) shown = true" data-timeline-entry
+                <div x-data="{ shown: false }" x-intersect.threshold.0.5="shown = true" data-timeline-item
                      class="relative pl-8 md:pl-0 md:grid md:grid-cols-2 md:gap-12 transition-all duration-700 transform"
                      :class="shown ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'">
                     <div
                         class="absolute left-[-5px] top-1 md:left-1/2 md:-ml-[5px] w-3 h-3 rounded-full transition-all duration-300"
-                        :class="activeIndex === 0 ? 'bg-white shadow-[0_0_15px_white]' : 'bg-gray-400 shadow-none'"
+                        :class="getDotClass(0)"
                     ></div>
                     <div class="md:text-right md:pr-4">
                         <span class="text-2xl font-bold text-white block">2012</span>
                     </div>
                     <div
                         class="transition-all duration-300"
-                        :class="activeIndex === 0 ? 'text-gray-300' : 'text-gray-400'"
-                        :style="activeIndex === 0 ? 'font-size:1.1rem' : 'font-size:1rem'"
+                        :class="getTextClass(0)"
                     >
                         <p>Začiatok cesty – prvé retail projekty a experimenty.</p>
                     </div>
                 </div>
 
-                <div x-data="{ shown: false }" x-intersect.threshold.0.5="shown = true" x-effect="if (revealAll) shown = true" data-timeline-entry
+                <div x-data="{ shown: false }" x-intersect.threshold.0.5="shown = true" data-timeline-item
                      class="relative pl-8 md:pl-0 md:grid md:grid-cols-2 md:gap-12 transition-all duration-700 delay-100 transform"
                      :class="shown ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'">
                     <div
                         class="absolute left-[-5px] top-1 md:left-1/2 md:-ml-[5px] w-3 h-3 rounded-full transition-all duration-300"
-                        :class="activeIndex === 1 ? 'bg-white shadow-[0_0_15px_white]' : 'bg-gray-400 shadow-none'"
+                        :class="getDotClass(1)"
                     ></div>
                     <div class="md:text-right md:pr-4">
                         <span class="text-2xl font-bold text-white block">2013</span>
                     </div>
                     <div
                         class="transition-all duration-300"
-                        :class="activeIndex === 1 ? 'text-gray-300' : 'text-gray-400'"
-                        :style="activeIndex === 1 ? 'font-size:1.1rem' : 'font-size:1rem'"
+                        :class="getTextClass(1)"
                     >
                         <p>Rozširujeme portfólio služieb a posilňujeme tím.</p>
                     </div>
                 </div>
 
-                <div x-data="{ shown: false }" x-intersect.threshold.0.5="shown = true" x-effect="if (revealAll) shown = true" data-timeline-entry
+                <div x-data="{ shown: false }" x-intersect.threshold.0.5="shown = true" data-timeline-item
                      class="relative pl-8 md:pl-0 md:grid md:grid-cols-2 md:gap-12 transition-all duration-700 delay-200 transform"
                      :class="shown ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'">
                     <div
                         class="absolute left-[-5px] top-1 md:left-1/2 md:-ml-[5px] w-3 h-3 rounded-full transition-all duration-300"
-                        :class="activeIndex === 2 ? 'bg-white shadow-[0_0_15px_white]' : 'bg-gray-400 shadow-none'"
+                        :class="getDotClass(2)"
                     ></div>
                     <div class="md:text-right md:pr-4">
                         <span class="text-2xl font-bold text-white block">2014</span>
                     </div>
                     <div
                         class="transition-all duration-300"
-                        :class="activeIndex === 2 ? 'text-gray-300' : 'text-gray-400'"
-                        :style="activeIndex === 2 ? 'font-size:1.1rem' : 'font-size:1rem'"
+                        :class="getTextClass(2)"
                     >
                         <p>Začíname s retailovou tlačou a meníme výklady po celom Slovensku.</p>
                     </div>
                 </div>
 
-                <div x-data="{ shown: false }" x-intersect.threshold.0.5="shown = true" x-effect="if (revealAll) shown = true" data-timeline-entry
+                <div x-data="{ shown: false }" x-intersect.threshold.0.5="shown = true" data-timeline-item
                      class="relative pl-8 md:pl-0 md:grid md:grid-cols-2 md:gap-12 transition-all duration-700 delay-300 transform"
                      :class="shown ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'">
                     <div
                         class="absolute left-[-5px] top-1 md:left-1/2 md:-ml-[5px] w-3 h-3 rounded-full transition-all duration-300"
-                        :class="activeIndex === 3 ? 'bg-white shadow-[0_0_15px_white]' : 'bg-gray-400 shadow-none'"
+                        :class="getDotClass(3)"
                     ></div>
                     <div class="md:text-right md:pr-4">
                         <span class="text-2xl font-bold text-white block">2018</span>
                     </div>
                     <div
                         class="transition-all duration-300"
-                        :class="activeIndex === 3 ? 'text-gray-300' : 'text-gray-400'"
-                        :style="activeIndex === 3 ? 'font-size:1.1rem' : 'font-size:1rem'"
+                        :class="getTextClass(3)"
                     >
                         <p>Budujeme vlastné marketingové štúdio a rozširujeme služby o digitálny marketing.</p>
                     </div>
                 </div>
 
-                <div x-data="{ shown: false }" x-intersect.threshold.0.5="shown = true" x-effect="if (revealAll) shown = true" data-timeline-entry
+                <div x-data="{ shown: false }" x-intersect.threshold.0.5="shown = true" data-timeline-item
                      class="relative pl-8 md:pl-0 md:grid md:grid-cols-2 md:gap-12 transition-all duration-700 delay-400 transform"
                      :class="shown ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'">
                     <div
                         class="absolute left-[-5px] top-1 md:left-1/2 md:-ml-[5px] w-3 h-3 rounded-full transition-all duration-300"
-                        :class="activeIndex === 4 ? 'bg-white shadow-[0_0_15px_white]' : 'bg-gray-400 shadow-none'"
+                        :class="getDotClass(4)"
                     ></div>
                     <div class="md:text-right md:pr-4">
                         <span class="text-2xl font-bold text-white block">2022</span>
                     </div>
                     <div
                         class="transition-all duration-300"
-                        :class="activeIndex === 4 ? 'text-gray-300' : 'text-gray-400'"
-                        :style="activeIndex === 4 ? 'font-size:1.1rem' : 'font-size:1rem'"
+                        :class="getTextClass(4)"
                     >
                         <p>Spúšťame projekty pre zahraničných klientov a otvárame prvé partnerstvá v EÚ.</p>
                     </div>
@@ -279,7 +272,23 @@ const companyCards = [
                 </p>
             </div>
 
-            <div class="grid gap-6 md:grid-cols-3" data-company-grid>
+            <div
+                class="grid gap-6 md:grid-cols-3"
+                data-company-grid
+                x-data="{ startX: 0, endX: 0 }"
+                @touchstart.passive="startX = $event.touches[0].clientX"
+                @touchmove.passive="endX = $event.touches[0].clientX"
+                @touchend="
+                    const diff = endX - startX;
+                    if (Math.abs(diff) > 40) {
+                        const direction = diff < 0 ? 'next' : 'prev';
+                        const event = new CustomEvent('company-swipe', { detail: direction });
+                        window.dispatchEvent(event);
+                    }
+                    startX = 0;
+                    endX = 0;
+                "
+            >
                 {companyCards.map((company, index) => (
                     <button
                         type="button"
@@ -535,152 +544,6 @@ const companyCards = [
         </div>
     </section>
     <script>
-        window.timelineScroll = function () {
-            return {
-                activeIndex: 0,
-                entries: [],
-                totalEntries: 0,
-                isLocked: false,
-                isDisabled: false,
-                blockRelockDirection: null,
-                touchStartY: null,
-                isAnimating: false,
-                releaseProgress: 0,
-                releaseThreshold: 20,
-                revealAll: false,
-                hasCompleted: false,
-                init() {
-                    this.entries = Array.from(this.$refs.timelineList?.querySelectorAll('[data-timeline-entry]') ?? []);
-                    this.totalEntries = this.entries.length;
-                    this.handleResize();
-                    this.boundEvaluate = () => this.evaluateLock();
-                    this.boundResize = () => this.handleResize();
-                    window.addEventListener('scroll', this.boundEvaluate, { passive: true });
-                    window.addEventListener('resize', this.boundResize);
-                    this.evaluateLock();
-                },
-                handleResize() {
-                    const shouldDisable = window.innerWidth < 1024;
-                    if (shouldDisable !== this.isDisabled) {
-                        this.isDisabled = shouldDisable;
-                        if (this.isDisabled && this.isLocked) {
-                            this.releaseLock();
-                        }
-                        if (!this.isDisabled) {
-                            this.evaluateLock();
-                        } else {
-                            this.activeIndex = -1;
-                        }
-                    }
-                },
-                evaluateLock() {
-                    if (this.isDisabled || !this.entries.length || this.hasCompleted) return;
-                    const rect = this.$el.getBoundingClientRect();
-                    if (this.blockRelockDirection === 'down') {
-                        if (rect.bottom <= 0) {
-                            this.blockRelockDirection = null;
-                        } else {
-                            return;
-                        }
-                    } else if (this.blockRelockDirection === 'up') {
-                        if (rect.top >= window.innerHeight) {
-                            this.blockRelockDirection = null;
-                        } else {
-                            return;
-                        }
-                    }
-                    const tolerance = 10;
-                    const shouldLock = rect.top <= tolerance && rect.bottom >= tolerance;
-                    if (shouldLock && !this.isLocked) {
-                        this.lock();
-                        if (!this.revealAll) {
-                            requestAnimationFrame(() => {
-                                this.revealAll = true;
-                            });
-                        }
-                    } else if (!shouldLock && this.isLocked) {
-                        this.releaseLock();
-                    }
-                },
-                lock() {
-                    this.isLocked = true;
-                    this.activeIndex = 0;
-                    this.revealAll = true;
-                    this.releaseProgress = 0;
-                },
-                releaseLock(direction = null, completed = false) {
-                    this.isLocked = false;
-                    this.activeIndex = -1;
-                    this.releaseProgress = 0;
-                    if (completed) {
-                        this.hasCompleted = true;
-                    }
-                    if (direction) {
-                        this.blockRelockDirection = direction;
-                    }
-                },
-                handleWheel(event) {
-                    if (!this.isLocked || this.isDisabled) return;
-                    event.preventDefault();
-                    if (this.isAnimating) return;
-                    this.isAnimating = true;
-                    if (event.deltaY > 0) {
-                        this.advance(Math.abs(event.deltaY));
-                    } else if (event.deltaY < 0) {
-                        this.rewind(Math.abs(event.deltaY));
-                    }
-                    setTimeout(() => {
-                        this.isAnimating = false;
-                    }, 350);
-                },
-                advance(delta = 0) {
-                    const amount = delta || 40;
-                    if (this.activeIndex < this.totalEntries - 1) {
-                        this.activeIndex++;
-                        this.releaseProgress = 0;
-                    } else {
-                        this.releaseProgress += amount;
-                        if (this.releaseProgress >= this.releaseThreshold) {
-                            this.releaseLock('down', true);
-                        }
-                    }
-                },
-                rewind(delta = 0) {
-                    const amount = delta || 40;
-                    if (this.activeIndex > 0) {
-                        this.activeIndex--;
-                        this.releaseProgress = 0;
-                    } else {
-                        this.releaseProgress += amount;
-                        if (this.releaseProgress >= this.releaseThreshold) {
-                            this.releaseLock('up', true);
-                        }
-                    }
-                },
-                handleTouchStart(event) {
-                    if (!this.isLocked || this.isDisabled) return;
-                    this.touchStartY = event.touches[0].clientY;
-                },
-                handleTouchMove(event) {
-                    if (!this.isLocked || this.touchStartY === null || this.isDisabled) return;
-                    const currentY = event.touches[0].clientY;
-                    const delta = this.touchStartY - currentY;
-                    if (Math.abs(delta) < 25) return;
-                    event.preventDefault();
-                    if (delta > 0) {
-                        this.advance(Math.abs(delta));
-                    } else if (delta < 0) {
-                        this.rewind(Math.abs(delta));
-                    }
-                    this.touchStartY = currentY;
-                },
-                handleTouchEnd() {
-                    this.touchStartY = null;
-                }
-            };
-        };
-    </script>
-    <script>
         (() => {
             const overlay = document.querySelector('[data-company-overlay]');
             if (!overlay) return;
@@ -770,6 +633,15 @@ const companyCards = [
                     setActive(activeIndex - 1);
                 }
             });
+            window.addEventListener('company-swipe', (event) => {
+                if (overlay.classList.contains('hidden')) return;
+                if (event.detail === 'next') {
+                    setActive(activeIndex + 1);
+                } else if (event.detail === 'prev') {
+                    setActive(activeIndex - 1);
+                }
+            });
         })();
     </script>
+
 </Layout>
