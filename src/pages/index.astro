@@ -12,9 +12,7 @@ const companyCards = [
 		tags: ['Retail', 'Experimenty', 'Pop-up'],
 		services: ['Retail rollouts a výklady', 'Eventové a promo inštalácie', 'Pilotné projekty pre nové značky'],
 		links: [
-			{ label: 'www.shark.sk', href: 'https://www.shark.sk' },
-			{ label: 'www.moodbooster.sk', href: 'https://www.moodbooster.sk' }
-		],
+			{ label: 'www.shark.sk', href: 'https://www.shark.sk' }],
 		colors: {
 			card: 'bg-white text-gray-900',
 			accent: 'bg-gray-900 text-white',
@@ -31,9 +29,7 @@ const companyCards = [
 		tags: ['Tlač', 'LED', 'Digitál'],
 		services: ['Tlač a produkcia POSM', 'LED boxy a svetelné inštalácie', 'Digitálne kampane'],
 		links: [
-			{ label: 'www.kpkprint.sk', href: 'https://www.kpkprint.sk' },
-			{ label: 'www.kpkprint.de', href: 'https://www.kpkprint.de' }
-		],
+			{ label: 'www.kpkprint.sk', href: 'https://www.kpkprint.sk' }],
 		colors: {
 			card: 'bg-[#f1e9db] text-[#3e2b1d]',
 			accent: 'bg-[#3e2b1d] text-white',
@@ -57,80 +53,149 @@ const companyCards = [
 		}
 	}
 ];
+
+
 ---
 <Layout title="ANKL cap | Angel Investor & Private Equity">
     <!-- BACKGROUND STARS GENERATOR -->
-    <div class="stars-bg" x-data x-init="
-         for(let i=0; i<100; i++){
-            let s = document.createElement('div');
+    <div class="stars-bg" x-data x-init="(() => {
+        for (let i = 0; i < 100; i++) {
+            const s = document.createElement('div');
             s.className = 'star';
             s.style.left = Math.random() * 100 + '%';
             s.style.top = Math.random() * 100 + '%';
             s.style.animationDelay = Math.random() * 5 + 's';
             $el.appendChild(s);
-         }
-    "></div>
+        }
+    })()"></div>
+
 
     <!-- SMART NAVBAR -->
-    <nav x-data="{ 
-            visible: true, 
-            lastScroll: 0, 
+<!-- HTML часть -->
+<nav x-data="navbar" 
+     class="fixed top-0 w-full z-50 transition-transform duration-500 border-b border-white/10 bg-black/80 backdrop-blur-md"
+     :class="visible ? 'translate-y-0' : '-translate-y-full'">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-20">
+            
+            <!-- Logo -->
+            <div class="flex-shrink-0">
+                <a href="#" class="group text-2xl font-bold text-white tracking-widest border border-white/20 px-3 py-1 uppercase transition hover:border-white/50">
+                    ANKL<span class="text-gray-400 group-hover:text-white transition-colors">cap</span>
+                </a>
+            </div>
+
+            <!-- Desktop Menu -->
+            <div class="hidden md:block">
+                <div class="ml-10 flex items-baseline space-x-8">
+                    <template x-for="item in navigation" :key="item.label">
+                        <a 
+                            :href="item.href"
+                            x-text="item.label"
+                            class="transition duration-300 text-sm font-medium"
+                            :class="item.isCta 
+                                ? 'px-4 py-2 border border-gray-400 text-gray-300 hover:bg-gray-100 hover:text-black' 
+                                : 'text-gray-400 hover:text-white px-3 py-2'"
+                        ></a>
+                    </template>
+                </div>
+            </div>
+
+            <!-- Mobile Burger Button -->
+            <div class="-mr-2 flex md:hidden">
+                <button @click="toggleMenu()" 
+                        type="button"
+                        class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+                        aria-controls="mobile-menu" 
+                        :aria-expanded="mobileMenu"
+                >
+                    <span class="sr-only">Open main menu</span>
+                    <!-- Icon: Menu -->
+                    <svg class="h-6 w-6 transition-transform duration-300" 
+                         :class="mobileMenu ? 'rotate-90 opacity-0 absolute' : 'opacity-100'"
+                         fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                    <!-- Icon: X -->
+                    <svg class="h-6 w-6 transition-transform duration-300"
+                         :class="mobileMenu ? 'opacity-100' : '-rotate-90 opacity-0 absolute'"
+                         fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Menu Overlay -->
+    <div x-show="mobileMenu"
+         x-collapse 
+         class="md:hidden bg-black border-t border-gray-800"
+         id="mobile-menu"
+    >
+        <div class="px-2 pt-2 pb-3 space-y-1 text-center">
+            <template x-for="item in navigation" :key="item.label">
+                <a @click="closeMenu()" 
+                   :href="item.href" 
+                   x-text="item.label"
+                   class="block px-3 py-3 text-base font-medium transition-colors"
+                   :class="item.isCta 
+                        ? 'bg-white text-black mx-4 rounded mt-4 hover:bg-gray-200' 
+                        : 'text-gray-300 hover:text-white hover:bg-gray-900'"
+                ></a>
+            </template>
+        </div>
+    </div>
+</nav>
+
+<script is:inline>
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('navbar', () => ({
+            visible: true,
+            lastScroll: 0,
             mobileMenu: false,
+            
+            navigation: [
+                { label: 'Vývoj',    href: '#about' },
+                { label: 'Firmy',    href: '#firmy' },
+                { label: 'Projekty', href: '#projekty' },
+                { label: 'Bio',      href: '#bio' },
+                { label: 'Kontakt',  href: '#kontakt', isCta: true }
+            ],
+
             init() {
-                window.addEventListener('scroll', () => {
-                    let st = window.pageYOffset;
-                    if (st <= 0) { this.visible = true; }
-                    else { this.visible = st < this.lastScroll; }
-                    this.lastScroll = st;
-                });
-            }
-        }"
-        :class="visible ? 'translate-y-0' : '-translate-y-full'"
-        class="fixed top-0 w-full z-50 transition-transform duration-300 bg-black/80 backdrop-blur-md border-b border-white/10">
-        
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-20">
-                <!-- Logo -->
-                <div class="flex-shrink-0">
-                    <a href="#" class="text-2xl font-bold text-white tracking-widest border border-white/20 px-3 py-1 uppercase">
-                        ANKL<span class="text-gray-400">cap</span>
-                    </a>
-                </div>
+                this.lastScroll = window.scrollY;
                 
-                <!-- Desktop Menu -->
-                <div class="hidden md:block">
-                    <div class="ml-10 flex items-baseline space-x-8">
-                        <a href="#about" class="hover:text-white text-gray-400 transition-colors px-3 py-2 text-sm font-medium">Vývoj</a>
-                        <a href="#firmy" class="hover:text-white text-gray-400 transition-colors px-3 py-2 text-sm font-medium">Firmy</a>
-                        <a href="#projekty" class="hover:text-white text-gray-400 transition-colors px-3 py-2 text-sm font-medium">Projekty</a>
-                        <a href="#bio" class="hover:text-white text-gray-400 transition-colors px-3 py-2 text-sm font-medium">Bio</a>
-                        <a href="#kontakt" class="px-4 py-2 border border-gray-400 text-gray-300 hover:bg-gray-100 hover:text-black transition duration-300 text-sm font-medium">Kontakt</a>
-                    </div>
-                </div>
+                window.addEventListener('scroll', () => {
+                    const currentScroll = window.scrollY;
+                    
+                    // ИСПРАВЛЕНИЕ ЗДЕСЬ:
+                    // Вместо (currentScroll <= 0), используем проверку на 0
+                    if (currentScroll === 0) {
+                        this.visible = true;
+                    } else {
+                        if (Math.abs(currentScroll - this.lastScroll) > 10) {
+                            // ИСПРАВЛЕНИЕ ЗДЕСЬ:
+                            // Используем '>', меняя переменные местами, чтобы избежать ошибки парсера
+                            this.visible = this.lastScroll > currentScroll;
+                        }
+                    }
+                    this.lastScroll = currentScroll;
+                }, { passive: true });
+            },
 
-                <!-- Mobile burger -->
-                <div class="-mr-2 flex md:hidden">
-                    <button @click="mobileMenu = !mobileMenu" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white focus:outline-none">
-                        <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                            <path :class="{'hidden': mobileMenu, 'inline-flex': !mobileMenu }" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                            <path :class="{'hidden': !mobileMenu, 'inline-flex': mobileMenu }" x-cloak stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Mobile Menu -->
-        <div x-show="mobileMenu" x-collapse class="md:hidden bg-black border-t border-gray-800">
-            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 text-center">
-                <a @click="mobileMenu = false" href="#about" class="text-gray-300 hover:text-white block px-3 py-2 text-base font-medium">Vývoj</a>
-                <a @click="mobileMenu = false" href="#firmy" class="text-gray-300 hover:text-white block px-3 py-2 text-base font-medium">Firmy</a>
-                <a @click="mobileMenu = false" href="#projekty" class="text-gray-300 hover:text-white block px-3 py-2 text-base font-medium">Projekty</a>
-                <a @click="mobileMenu = false" href="#bio" class="text-gray-300 hover:text-white block px-3 py-2 text-base font-medium">Bio</a>
-                <a @click="mobileMenu = false" href="#kontakt" class="text-gray-300 hover:text-white block px-3 py-2 text-base font-medium">Kontakt</a>
-            </div>
-        </div>
-    </nav>
+            toggleMenu() {
+                this.mobileMenu = !this.mobileMenu;
+                document.body.style.overflow = this.mobileMenu ? 'hidden' : '';
+            },
+            
+            closeMenu() {
+                this.mobileMenu = false;
+                document.body.style.overflow = '';
+            }
+        }));
+    });
+</script>
 
     <!-- HERO SECTION -->
     <section class="relative h-screen flex flex-col items-center justify-center text-center px-4 overflow-hidden">
@@ -154,114 +219,76 @@ const companyCards = [
     </section>
 
     <!-- TIMELINE SECTION -->
-    <section
-        id="about"
-        class="py-24 relative"
-        x-data="timelineController()"
-        x-init="init()"
-        x-intersect:enter="onEnterSection()"
-        x-intersect:leave="onLeaveSection()"
-    >
-        <div class="max-w-4xl mx-auto px-4 sm:px-6">
-            <h2 class="text-3xl md:text-4xl font-bold text-center mb-16 text-silver-gradient">Ako sme sa vyvíjali</h2>
-            
-            <div class="relative border-l border-gray-800 ml-4 md:ml-0 md:pl-0 space-y-12" x-ref="timelineList">
-                <div x-data="{ shown: false }" x-intersect.threshold.0.5="shown = true" data-timeline-item
-                     class="relative pl-8 md:pl-0 md:grid md:grid-cols-2 md:gap-12 transition-all duration-700 transform"
-                     :class="shown ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'">
-                    <div
-                        class="absolute left-[-5px] top-1 md:left-1/2 md:-ml-[5px] w-3 h-3 rounded-full transition-all duration-300"
-                        :class="getDotClass(0)"
-                    ></div>
-                    <div class="md:text-right md:pr-4">
-                        <span class="text-2xl font-bold text-white block">2012</span>
-                    </div>
-                    <div
-                        class="transition-all duration-300"
-                        :class="getTextClass(0)"
-                    >
-                        <p>Začiatok cesty – prvé retail projekty a experimenty.</p>
-                    </div>
-                </div>
+<section id="about" class="relative bg-gray-900 text-white" x-data="timeline">
+    <!-- Контейнер: На мобилках колонка, на десктопе ряд -->
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 md:flex md:justify-between">
 
-                <div x-data="{ shown: false }" x-intersect.threshold.0.5="shown = true" data-timeline-item
-                     class="relative pl-8 md:pl-0 md:grid md:grid-cols-2 md:gap-12 transition-all duration-700 delay-100 transform"
-                     :class="shown ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'">
-                    <div
-                        class="absolute left-[-5px] top-1 md:left-1/2 md:-ml-[5px] w-3 h-3 rounded-full transition-all duration-300"
-                        :class="getDotClass(1)"
-                    ></div>
-                    <div class="md:text-right md:pr-4">
-                        <span class="text-2xl font-bold text-white block">2013</span>
-                    </div>
-                    <div
-                        class="transition-all duration-300"
-                        :class="getTextClass(1)"
-                    >
-                        <p>Rozširujeme portfólio služieb a posilňujeme tím.</p>
-                    </div>
+        <!-- ЛЕВАЯ КОЛОНКА (ЗАЛИПАЮЩАЯ) -->
+        <!-- md:w-5/12 - ширина чуть меньше половины -->
+        <!-- md:sticky md:top-0 md:h-screen - делает блок фиксированным на десктопе -->
+        <div class="md:w-5/12 md:sticky md:top-0 md:h-screen flex flex-col justify-center py-12 md:py-0 z-10">
+            <div class="space-y-6">
+                <h2 class="text-3xl md:text-5xl font-bold text-silver-gradient leading-tight">
+                    Ako sme sa <br> vyvíjali
+                </h2>
+                
+                <!-- Динамический год (показываем текущий активный) -->
+                <!-- transition-key помогает анимировать смену цифр -->
+                <div class="hidden md:block">
+                    <span class="text-[8rem] font-bold text-gray-800 leading-none transition-all duration-500 select-none block"
+                          style="text-shadow: 0 0 2px rgba(255,255,255,0.1);"
+                          x-text="activeYear"
+                          x-key="activeIndex"
+                    ></span>
                 </div>
-
-                <div x-data="{ shown: false }" x-intersect.threshold.0.5="shown = true" data-timeline-item
-                     class="relative pl-8 md:pl-0 md:grid md:grid-cols-2 md:gap-12 transition-all duration-700 delay-200 transform"
-                     :class="shown ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'">
-                    <div
-                        class="absolute left-[-5px] top-1 md:left-1/2 md:-ml-[5px] w-3 h-3 rounded-full transition-all duration-300"
-                        :class="getDotClass(2)"
-                    ></div>
-                    <div class="md:text-right md:pr-4">
-                        <span class="text-2xl font-bold text-white block">2014</span>
-                    </div>
-                    <div
-                        class="transition-all duration-300"
-                        :class="getTextClass(2)"
-                    >
-                        <p>Začíname s retailovou tlačou a meníme výklady po celom Slovensku.</p>
-                    </div>
-                </div>
-
-                <div x-data="{ shown: false }" x-intersect.threshold.0.5="shown = true" data-timeline-item
-                     class="relative pl-8 md:pl-0 md:grid md:grid-cols-2 md:gap-12 transition-all duration-700 delay-300 transform"
-                     :class="shown ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'">
-                    <div
-                        class="absolute left-[-5px] top-1 md:left-1/2 md:-ml-[5px] w-3 h-3 rounded-full transition-all duration-300"
-                        :class="getDotClass(3)"
-                    ></div>
-                    <div class="md:text-right md:pr-4">
-                        <span class="text-2xl font-bold text-white block">2018</span>
-                    </div>
-                    <div
-                        class="transition-all duration-300"
-                        :class="getTextClass(3)"
-                    >
-                        <p>Budujeme vlastné marketingové štúdio a rozširujeme služby o digitálny marketing.</p>
-                    </div>
-                </div>
-
-                <div x-data="{ shown: false }" x-intersect.threshold.0.5="shown = true" data-timeline-item
-                     class="relative pl-8 md:pl-0 md:grid md:grid-cols-2 md:gap-12 transition-all duration-700 delay-400 transform"
-                     :class="shown ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'">
-                    <div
-                        class="absolute left-[-5px] top-1 md:left-1/2 md:-ml-[5px] w-3 h-3 rounded-full transition-all duration-300"
-                        :class="getDotClass(4)"
-                    ></div>
-                    <div class="md:text-right md:pr-4">
-                        <span class="text-2xl font-bold text-white block">2022</span>
-                    </div>
-                    <div
-                        class="transition-all duration-300"
-                        :class="getTextClass(4)"
-                    >
-                        <p>Spúšťame projekty pre zahraničných klientov a otvárame prvé partnerstvá v EÚ.</p>
-                    </div>
-                </div>
+                
+                <p class="text-gray-400 text-lg md:max-w-sm">
+                    Prejdite si našu históriu rok po roku a pozrite sa, ako sme rástli.
+                </p>
             </div>
         </div>
-    </section>
+
+        <!-- ПРАВАЯ КОЛОНКА (СКРОЛЛ) -->
+        <!-- md:w-6/12 - правая часть -->
+        <div class="md:w-6/12 py-12 md:py-24">
+            <div class="relative border-l border-gray-800 ml-4 md:ml-0 space-y-20 md:space-y-32 pb-24">
+                
+                <template x-for="(item, index) in items" :key="item.year">
+                    <div 
+                        x-data="{ shown: false }" 
+                        x-intersect.threshold.0.5="shown = true"
+                        x-intersect.margin.-45%.0px.-45%.0px="activeIndex = index"
+                        class="relative pl-12 transition-all duration-700"
+                        :class="shown ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'"
+                    >
+                        <!-- Точка -->
+                        <div
+                            class="absolute left-[-5px] top-2 w-3 h-3 rounded-full transition-all duration-500 border border-gray-700"
+                            :class="activeIndex === index ? styles.dot.active : styles.dot.inactive"
+                        ></div>
+
+                        <!-- Год (виден только на мобильных, т.к. на десктопе он слева) -->
+                        <span class="md:hidden text-2xl font-bold text-white block mb-2" x-text="item.year"></span>
+
+                        <!-- Текст -->
+                        <div
+                            class="transition-all duration-500 transform"
+                            :class="activeIndex === index ? styles.text.active : styles.text.inactive"
+                        >
+                            <p class="text-xl md:text-2xl font-light leading-relaxed" x-text="item.text"></p>
+                        </div>
+                    </div>
+                </template>
+
+            </div>
+        </div>
+
+    </div>
+</section>
 
 
     <!-- FIRMY DETAIL (Overlay Slider) -->
-    <section id="firmy-detail" class="py-24 bg-black border-t border-gray-900">
+    <section id="firmy" class="py-24 bg-black border-t border-gray-900">
         <div class="max-w-7xl mx-auto px-4">
             <div class="text-center mb-14">
                 <p class="uppercase tracking-[0.3em] text-sm text-gray-500">Interaktívny prehľad</p>

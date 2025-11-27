@@ -1,8 +1,6 @@
 ---
 import '../styles/global.css';
 import TimelineController from '../components/TimelineController.astro';
-
-
 const { title = 'ANKL cap | Angel Investor & Private Equity' } = Astro.props;
 ---
 <!doctype html>
@@ -14,12 +12,61 @@ const { title = 'ANKL cap | Angel Investor & Private Equity' } = Astro.props;
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
 		<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&display=swap" rel="stylesheet" />
-	</head>
-	<body class="antialiased">
 		<script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
 		<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
+
+	</head>
+	<body class="antialiased">
+
 		    <TimelineController />
 		<slot />
+<script is:inline>
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('navbar', () => ({
+            visible: true,
+            lastScroll: 0,
+            mobileMenu: false,
+            
+            navigation: [
+                { label: 'Vývoj',    href: '#about' },
+                { label: 'Firmy',    href: '#firmy' },
+                { label: 'Projekty', href: '#projekty' },
+                { label: 'Bio',      href: '#bio' },
+                { label: 'Kontakt',  href: '#kontakt', isCta: true }
+            ],
 
+            init() {
+                this.lastScroll = window.scrollY;
+                
+                window.addEventListener('scroll', () => {
+                    const currentScroll = window.scrollY;
+                    
+                    // ИСПРАВЛЕНИЕ ЗДЕСЬ:
+                    // Вместо (currentScroll <= 0), используем проверку на 0
+                    if (currentScroll === 0) {
+                        this.visible = true;
+                    } else {
+                        if (Math.abs(currentScroll - this.lastScroll) > 10) {
+                            // ИСПРАВЛЕНИЕ ЗДЕСЬ:
+                            // Используем '>', меняя переменные местами, чтобы избежать ошибки парсера
+                            this.visible = this.lastScroll > currentScroll;
+                        }
+                    }
+                    this.lastScroll = currentScroll;
+                }, { passive: true });
+            },
+
+            toggleMenu() {
+                this.mobileMenu = !this.mobileMenu;
+                document.body.style.overflow = this.mobileMenu ? 'hidden' : '';
+            },
+            
+            closeMenu() {
+                this.mobileMenu = false;
+                document.body.style.overflow = '';
+            }
+        }));
+    });
+</script>
 	</body>
 </html>
