@@ -79,9 +79,15 @@ const companyCards = [
         <div class="flex items-center justify-between h-20">
             
             <!-- Logo -->
-            <div class="flex-shrink-0">
-                <a href="#" class="group text-2xl font-bold text-white tracking-widest border border-white/20 px-3 py-1 uppercase transition hover:border-white/50">
-                    ANKL<span class="text-gray-400 group-hover:text-white transition-colors">cap</span>
+            <div class="flex">
+                 <a href="#"> <svg
+    class="h-8 w-auto text-gray-300 hover:text-gray-100 transition duration-300"
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 170 40"
+    fill="currentColor"
+    aria-hidden="true"
+  >
+<?xml version="1.0" encoding="UTF-8"?><svg id="Layer_2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 189.75 38.07"><g id="Layer_1-2"><path d="M12.98,20.27l3.31-8.29,3.27,8.29h-6.58ZM0,31.87h8.5l2.09-5.28h11.35l2.09,5.28h8.71L20.27,2.34h-7.83L0,31.87Z";"/><polygon points="30.56 31.87 38.6 31.87 38.6 15.79 51.17 31.87 58.25 31.87 58.25 2.55 50.2 2.55 50.2 18.05 38.14 2.55 30.56 2.55 30.56 31.87";"/><polygon points="59.76 31.87 67.88 31.87 67.88 24.25 70.86 20.98 78.27 31.87 87.99 31.87 76.51 15.11 87.61 2.55 78.02 2.55 67.88 14.44 67.88 2.55 59.76 2.55 59.76 31.87";"/><polygon points="88.2 31.87 110.52 31.87 110.52 24.75 96.32 24.75 96.32 2.55 88.2 2.55 88.2 31.87";"/><path d="M129.48,31.87c4.06,0,6.66-1.76,8.84-4.19l-2.05-1.93c-1.72,1.84-3.85,3.22-6.62,3.22-4.52,0-7.96-3.73-7.96-8.42v-.08c0-4.65,3.35-8.38,7.75-8.38,2.93,0,4.86,1.47,6.58,3.27l2.14-2.26c-2.01-2.14-4.57-3.85-8.67-3.85-6.32,0-11.1,5.19-11.1,11.31v.08c0,6.07,4.77,11.22,11.1,11.22";"/><path d="M150.72,29.27c-2.93,0-5.44-1.59-5.44-4.31v-.08c0-2.72,2.26-4.48,6.32-4.48,2.64,0,4.77.46,6.37.92v2.09c0,3.43-3.27,5.86-7.25,5.86M150.09,31.83c3.81,0,6.32-1.76,7.83-3.73v3.27h3.1v-13.23c0-2.76-.75-4.86-2.22-6.32-1.59-1.59-3.94-2.39-6.99-2.39s-5.49.71-7.87,1.8l.96,2.64c2.01-.92,4.02-1.59,6.58-1.59,4.06,0,6.45,2.01,6.45,5.91v.75c-1.93-.54-3.9-.92-6.66-.92-5.49,0-9.26,2.43-9.26,6.99v.08c0,4.44,4.06,6.74,8.08,6.74Z";"/><path d="M178.82,28.94c-4.02,0-7.83-3.35-7.83-8.38v-.08c0-4.94,3.81-8.33,7.83-8.33s7.62,3.27,7.62,8.38v.08c0,5.24-3.43,8.33-7.62,8.33M167.89,38.07h3.22v-10.85c1.68,2.43,4.27,4.61,8.29,4.61,5.24,0,10.35-4.19,10.35-11.27v-.08c0-7.12-5.15-11.22-10.35-11.22-3.98,0-6.53,2.22-8.29,4.82v-4.36h-3.22v28.35Z";"/><rect x="113.51" width="2" height="32.56";"/></g></svg>  </svg>
                 </a>
             </div>
 
@@ -303,7 +309,7 @@ const companyCards = [
                 {companyCards.map((company, index) => (
                     <button
                         type="button"
-                        class={`group relative rounded-3xl border border-white/10 p-6 text-left transition hover:-translate-y-1 hover:border-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40 ${company.colors.card}`}
+                        class={`group relative rounded-3xl border border-white/10 p-6 text-left transition duration-100 hover:-translate-y-1 hover:border-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40 ${company.colors.card}`}
                         data-company-trigger={index}
                     >
                         <div class="text-xs uppercase tracking-[0.4em] opacity-60 mb-4">{company.subtitle}</div>
@@ -477,7 +483,7 @@ const companyCards = [
     <div x-data="{ 
         links: [
             'www.printexpert.sk', 'www.inzero.sk', 'www.shark.sk',
-            'www.moodbooster.sk', 'www.j4ff.sk', 'www.ticketke.sk',
+            'www.moodbooster.sk', 'www.j4ff.com', 'www.ticketke.sk',
             'www.pkosice.sk', 'www.hypotekarnyexpert.sk', 'www.akobytmilionar.sk',
             'www.obmi.cz', 'www.obmi.institute', 'www.kpkprint.sk',
             'www.kpkprint.hu', 'www.kpkprint.de', 'www.ledbox.sk',
@@ -486,12 +492,12 @@ const companyCards = [
     }">
     <section id="projekty" class="py-20 relative bg-gradient-to-b from-black to-[#0a0a0a]">
         <div class="max-w-6xl mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center mb-12 text-gray-200">Naše projekty</h2>
+            <h2 class="text-3xl font-bold text-center mb-12 text-gray-200">Projekty</h2>
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <template x-for="link in links" :key="link">
                     <a :href="'https://' + link" target="_blank" 
-                       class="group flex items-center justify-between p-4 bg-[#111] border border-gray-800 rounded-lg hover:border-gray-500 hover:bg-[#1a1a1a] transition-all duration-300">
+                       class="group flex items-center justify-between p-4 bg-[#111] border border-gray-800 rounded-lg hover:border-gray-500 hover:bg-[#1a1a1a] hover:-translate-y-1 transition-all duration-100">
                         <span class="text-gray-400 group-hover:text-white font-mono text-sm" x-text="link"></span>
                         <svg class="w-4 h-4 text-gray-600 group-hover:text-white transform group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                     </a>
@@ -509,8 +515,8 @@ const companyCards = [
             <div class="flex flex-col md:flex-row items-center gap-12">
                 <div class="w-64 h-64 md:w-80 md:h-80 shrink-0 relative">
                     <div class="absolute inset-0 border-2 border-gray-700 transform rotate-6"></div>
-                    <div class="absolute inset-0 bg-gray-800 grayscale hover:grayscale-0 transition duration-700 overflow-hidden shadow-2xl">
-                        <img src="https://ui-avatars.com/api/?name=Andrej+Klima&background=1F2937&color=fff&size=400" alt="Andrej Klíma" class="w-full h-full object-cover" />
+                    <div class="absolute inset-0 bg-gray-800 hover:grayscale-0 transition duration-700 overflow-hidden shadow-2xl">
+                        <img src="/Andrej-KLIMA.jpg" alt="Andrej Klíma" class="w-full h-full object-cover" />
                     </div>
                 </div>
                 
@@ -534,7 +540,7 @@ const companyCards = [
     <!-- KONTAKTY -->
     <section id="kontakt" class="py-20 bg-black border-t border-gray-900">
         <div class="max-w-4xl mx-auto px-4 text-center">
-            <h2 class="text-3xl font-bold mb-12 text-white">Kontaktujte nás</h2>
+            <h2 class="text-3xl font-bold mb-12 text-white">Kontakty</h2>
             
             <div class="grid md:grid-cols-2 gap-8">
                 <div class="p-8 border border-gray-800 hover:border-gray-600 transition duration-500 bg-[#080808]">
