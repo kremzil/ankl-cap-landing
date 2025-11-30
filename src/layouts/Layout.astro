@@ -1,7 +1,12 @@
 ---
 import '../styles/global.css';
+import Seo from "../components/Seo.astro";
 import TimelineController from '../components/TimelineController.astro';
-const { title = 'ANKL cap | Angel Investor & Private Equity' } = Astro.props;
+const { title = 'ANKL cap | Angel Investor & Private Equity',
+        description = 'Partner pre startupy a rastové firmy – angel investor a private equity so zameraním na dlhodobú hodnotu a inovácie.',
+        image,
+        url,
+} = Astro.props;
 ---
 <!doctype html>
 <html lang="sk" class="scroll-smooth">
@@ -10,7 +15,12 @@ const { title = 'ANKL cap | Angel Investor & Private Equity' } = Astro.props;
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
-		<title>{title}</title>
+		<Seo
+            title={title}
+            description={description}
+            image={image}
+            url={url}
+        />
 		<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&display=swap" rel="stylesheet" />
 		<script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
 		<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
