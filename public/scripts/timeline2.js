@@ -9,7 +9,6 @@ document.addEventListener('alpine:init', () => {
         ],
         activeIndex: 0,
         
-        // Вспомогательная функция для получения текущего года
         get activeYear() {
             return this.items[this.activeIndex]?.year || '';
         },

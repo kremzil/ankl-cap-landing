@@ -50,16 +50,12 @@ const { title = 'ANKL cap | Angel Investor & Private Equity',
                 
                 window.addEventListener('scroll', () => {
                     const currentScroll = window.scrollY;
-                    
-                    // ИСПРАВЛЕНИЕ ЗДЕСЬ:
-                    // Вместо (currentScroll <= 0), используем проверку на 0
+
                     if (currentScroll === 0) {
                         this.visible = true;
                     } else {
                         if (Math.abs(currentScroll - this.lastScroll) > 10) {
-                            // ИСПРАВЛЕНИЕ ЗДЕСЬ:
-                            // Используем '>', меняя переменные местами, чтобы избежать ошибки парсера
-                            this.visible = this.lastScroll > currentScroll;
+                         this.visible = this.lastScroll > currentScroll;
                         }
                     }
                     this.lastScroll = currentScroll;
